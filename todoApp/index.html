@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Angular JS Todo List</title>
+	<link rel="stylesheet" href="css/style.css">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	</head>
+	<body ng-app="todoApp">
+		<header class="page-header">
+			<div class="container">
+				<h1>Angular JS Todo List</h1>
+				<p>This program does not store data.</p>
+			</div>
+		</header>
+		<main ng-controller="mainCtrl">
+			<div class="container list">
+				<div class="row">
+					<ul class="list-inline"">
+						<li class="list-inline-item">
+							<p><span class="lead">{{remaining()}}</span> out of <span class="lead">{{todos.length}}</span> are remaining.
+						</li>
+						<li class="list-inline-item btn-group">
+							<button class="btn btn-default" ng-click="toggleAll()" >Check / Uncheck All Items</button>
+							<button class="btn btn-danger" ng-click="removeChecked(todo | filter : {'completed' : true})">Remove Checked Item</button>
+						</li>
+					</ul>
+					<form class="input-group input-group-lg" ng-submit="addTodos();addClass()">
+						<input class="form-control" type="text" placeholder="Add an item" ng-model="newName" required/>
+						<span class="input-group-btn">
+							<button type="submit" class="btn btn-primary"/>ADD</button>
+						</span>
+					</form>
+				</div>
+				<hr/>
+				<div class="row list-item">
+					<ul class="list-group" ng-class="class">
+					<p></p>
+						<li class="list-group-item" ng-repeat="todo in todos | orderBy: 'completed'"  ng-class="{'completed': todo.completed , 'edited' : todo.edited}">
+						<!-- orderBy:'id' would result in [{id: 'bar'}, {id: 'foo'}]. -->
+							<form class="input-group">
+								<span class="input-group-addon">
+									<input type="checkbox" ng-model="todo.completed">
+									<!-- we can define new variables, such as "completed" or "editing" in html, without the variables is defined in the controller -->
+								</span>
+									<label class="form-control" ng-hide="editing" ng-dblclick="editing = !editing">{{todo.name}}</label>
+									<!-- when editing variable is true, hide label -->
+									<input ng-change="todo.edited = true" ng-blur="editing = false" ng-model="todo.name" ng-show="editing" type="text" class="form-control editing-item" required/>
+									<!-- when eiditing variable is true, show input -->
+								<span class="input-group-btn">
+									<button class="btn btn-default" ng-click="editing = !editing">Edit</button>
+									<!-- toggle editing variable -->
+									<button type="reset" class="btn btn-danger" ng-if="!editing" ng-click="deleteTodo($index)">Delete</button>
+								</span>
+							</form>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+		<footer>
+			<div class="container"></div>
+		</footer>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+		<script src="js/app.js"></script>
+		</body>
+</html>
